@@ -50,11 +50,9 @@ public class MainActivity extends AppCompatActivity {
         mMsg.setVisibility (flag);
         mMsg.setTextColor (Color.RED);
         if(flag == View.INVISIBLE){
-            GridView gridview = (GridView) findViewById(R.id.gridview);
-            gridview.setVisibility (View.VISIBLE);
+            ((GridView) findViewById(R.id.gridview)).setVisibility (View.VISIBLE);
         }else{
-            GridView gridview = (GridView) findViewById(R.id.gridview);
-            gridview.setVisibility (View.INVISIBLE);
+            ((GridView) findViewById(R.id.gridview)).setVisibility (View.INVISIBLE);
         }
     }
 
