@@ -2,10 +2,13 @@ package com.example.balav.MovieGridView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,12 +46,39 @@ public class DetailActivity extends AppCompatActivity {
             closeOnError();
             return;
         }
-        loadMovie (movie_id);
+        if(NetworkUtils.isConnected (DetailActivity.this)){
+            loadMovie (movie_id);
+
+        }else{
+            posterIv.setVisibility (View.INVISIBLE);populateUI_NoConnection();
+
+        }
+
+
 
 
 
     }
 
+    private void populateUI_NoConnection(){
+        TextView mTitle = (TextView) findViewById(R.id.title_tv);
+        TextView mPlotSynopsis = (TextView) findViewById(R.id.plot_synopsis_tv);
+        TextView mUserRating = (TextView)findViewById (R.id.user_rating_tv);
+        TextView mReleaseDate = (TextView)findViewById (R.id.relase_date_tv);
+        mTitle.setText ("Please Check your Internet Connection");
+        mTitle.setTextSize (16);
+        mTitle.setTextColor (Color.RED);
+        mPlotSynopsis.setVisibility (View.INVISIBLE);
+        mUserRating.setVisibility (View.INVISIBLE);
+        mReleaseDate.setVisibility (View.INVISIBLE);
+
+        ((TextView) findViewById(R.id.title_label_tv)).setVisibility (View.INVISIBLE);
+        ((TextView) findViewById(R.id.plot_synopsis_label_tv)).setVisibility (View.INVISIBLE);
+        ((TextView)findViewById (R.id.user_rating_label_tv)).setVisibility (View.INVISIBLE);
+        ((TextView)findViewById (R.id.relase_date_label_tv)).setVisibility (View.INVISIBLE);
+
+
+    }
     private void populateUI(Movie movie) {
         TextView mTitle = (TextView) findViewById(R.id.title_tv);
         TextView mPlotSynopsis = (TextView) findViewById(R.id.plot_synopsis_tv);

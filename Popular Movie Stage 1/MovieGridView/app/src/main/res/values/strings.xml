@@ -7,6 +7,7 @@
     <string name="Release_Date_label">Release Date:</string>
     <!-- Error messages-->
     <string name="detail_error_message">Movie data not available</string>
+    <string name="internet_error_message">Please check your Internet Connection</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->

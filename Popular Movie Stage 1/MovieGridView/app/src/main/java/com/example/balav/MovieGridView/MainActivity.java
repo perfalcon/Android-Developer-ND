@@ -2,6 +2,7 @@ package com.example.balav.MovieGridView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,11 +13,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.balav.MovieGridView.model.Movie;
 import com.example.balav.MovieGridView.utils.JsonUtils;
 import com.example.balav.MovieGridView.utils.NetworkUtils;
 import com.example.balav.MovieGridView.R;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,7 +42,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadMovies(MOVIE_SORT_POPULAR);
+
     }
+    private void displayErrorMessage(int flag){
+        Log.v ("MainActivity","No Internet Connection");
+        TextView mMsg = (TextView) findViewById(R.id.messae_tv);
+        mMsg.setVisibility (flag);
+        mMsg.setTextColor (Color.RED);
+        if(flag == View.INVISIBLE){
+            GridView gridview = (GridView) findViewById(R.id.gridview);
+            gridview.setVisibility (View.VISIBLE);
+        }else{
+            GridView gridview = (GridView) findViewById(R.id.gridview);
+            gridview.setVisibility (View.INVISIBLE);
+        }
+    }
+
     private void loadGridView(){
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
@@ -50,22 +69,25 @@ public class MainActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener () {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                //Toast.makeText(MainActivity.this, "" + position,
-                  //      Toast.LENGTH_SHORT).show();
-                launchDetailActivity(listIDs.get (position));
+                    launchDetailActivity(listIDs.get (position));
             }
         });
     }
 
     private void launchDetailActivity(int id) {
-        Log.i("detail","in Detail ----->");
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailActivity.MOVIE_ID, id);
         startActivity(intent);
     }
 
     private void loadMovies(String movie_type){
-        new FetchMovieTask ().execute(movie_type);
+        if(NetworkUtils.isConnected (MainActivity.this)){
+            displayErrorMessage(View.INVISIBLE);
+            new FetchMovieTask ().execute(movie_type);
+        }else {
+            displayErrorMessage(View.VISIBLE);
+        }
+
     }
 
     public class FetchMovieTask extends AsyncTask<String,Void,String> {

@@ -15,8 +15,13 @@
  */
 package com.example.balav.MovieGridView.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
+
+import com.example.balav.MovieGridView.BuildConfig;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,11 +43,12 @@ public final class NetworkUtils {
     private static final String TOP_RATED="top_rated";
     private static final String MOVIE="movie";
     private static final String API_KEY="api_key";
-    private static final String API_VAL="ADD YOUR KEY";
+    private static final String API_VAL= BuildConfig.API_VAL;
     private static final String IMAGE_BASE_URL="http://image.tmdb.org/t/p/";
     private static final String IMAGE_WIDTH_185="w185";
     private static final String IMAGE_WIDTH_342="w342";
     private static final String IMAGE_WIDTH_500="w500";
+
     public static final int IMAGE_SIZE_185=185;
     public static final int IMAGE_SIZE_342=342;
     public static final int IMAGE_SIZE_500=500;
@@ -84,7 +90,6 @@ public final class NetworkUtils {
         URL url = null;
         try{
             url=new URL (builtUri.toString());
-            //url = new URL ("https://andfun-weather.udacity.com/staticweather?q=94043%2CUSA");
             }catch (MalformedURLException e){
             e.printStackTrace();
         }
@@ -177,5 +182,16 @@ public final class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
+    }
+
+    public static boolean isConnected(Context context){
+
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 }
