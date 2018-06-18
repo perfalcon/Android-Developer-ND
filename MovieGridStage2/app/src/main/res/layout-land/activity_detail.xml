@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"> -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.balav.moviegridstage2.DetailActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:background="#029789"
+        android:gravity="center_vertical|start|clip_horizontal"
+        android:paddingLeft="20sp"
+        android:shadowColor="@android:color/darker_gray"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="TextView"
+        android:textAlignment="textStart"
+        android:textAppearance="@style/AppTheme"
+        android:textColor="@android:color/white"
+        android:textSize="36sp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <ImageView
+        android:id="@+id/poster_iv"
+        android:layout_width="118dp"
+        android:layout_height="139dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv"
+        app:srcCompat="@drawable/sample_1" />
+
+    <TextView
+        android:id="@+id/plot_synopsis_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="256dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="256dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:gravity="fill_horizontal|fill_vertical"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.943"
+        app:layout_constraintStart_toEndOf="@+id/relase_date_tv"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv"
+        tools:paddingLeft="15dp" />
+
+    <TextView
+        android:id="@+id/user_rating_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="8.1/10"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/poster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/duration_tv" />
+
+    <TextView
+        android:id="@+id/duration_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="120 min"
+        android:textSize="20dp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toEndOf="@+id/poster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/relase_date_tv" />
+
+    <TextView
+        android:id="@+id/relase_date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="2018"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/poster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv" />
+
+    <TextView
+        android:id="@+id/trailer_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Trailers:"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.154"
+        app:layout_constraintStart_toEndOf="@+id/duration_tv"
+        app:layout_constraintTop_toBottomOf="@+id/plot_synopsis_tv" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_trailers"
+        android:layout_width="285dp"
+        android:layout_height="69dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.39"
+        app:layout_constraintStart_toEndOf="@+id/favorite_tb"
+        app:layout_constraintTop_toBottomOf="@+id/trailer_label" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_reviews"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_label"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/review_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="Rievews:"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_trailers" />
+
+    <ToggleButton
+        android:id="@+id/favorite_tb"
+        android:layout_width="93dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="#029789"
+        android:gravity="center_vertical|center|center_horizontal|clip_horizontal"
+        android:textColor="?attr/colorButtonNormal"
+        android:textOff="@string/mark_favorite"
+        android:textOn="@string/un_mark_favorite"
+        app:layout_constraintStart_toEndOf="@+id/poster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/user_rating_tv" />
+
+
+</android.support.constraint.ConstraintLayout>
+<!--
+</ScrollView> -->
