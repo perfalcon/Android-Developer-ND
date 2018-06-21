@@ -62,14 +62,16 @@ public class DetailActivity extends AppCompatActivity implements  CompoundButton
         if (intent == null) {
             closeOnError();
         }
-        int movie_id = intent.getIntExtra(MOVIE_ID, DEFAULT_ID);
-        if (movie_id == DEFAULT_ID) {
-            // EXTRA_POSITION not found in intent
-            closeOnError();
-            return;
+
+        Movie fromIntent = intent.getParcelableExtra (MOVIE_ID);
+        if(fromIntent == null){
+            closeOnError ();
         }
+        int movie_id=fromIntent.getId ();
+
+
         Log.v (TAG,"OPTION_SELECTED-->"+intent.getStringExtra (OPTION_SELECTED));
-        bFav = intent.getStringExtra (OPTION_SELECTED).equals ("favorites")?true:false;
+        bFav = intent.getStringExtra (OPTION_SELECTED).equals ("favorites");//?true:false;
         Log.v (TAG,"bFav-->"+bFav);
 
 

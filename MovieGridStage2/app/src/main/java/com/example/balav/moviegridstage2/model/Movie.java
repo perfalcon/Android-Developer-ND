@@ -1,6 +1,9 @@
 package com.example.balav.moviegridstage2.model;
 
-public class Movie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Movie implements Parcelable{
 
     private int id;
     private String title;
@@ -10,6 +13,30 @@ public class Movie {
     private double userRating;
     private String reviews; //json String
     private String trailers; //json String
+
+    protected Movie(Parcel in) {
+        id = in.readInt ();
+        title = in.readString ();
+        posterPath = in.readString ();
+        plotSynopsis = in.readString ();
+        releaseDate = in.readString ();
+        userRating = in.readDouble ();
+        reviews = in.readString ();
+        trailers = in.readString ();
+        duration = in.readInt ();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie> () {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie (in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public int getDuration() {
         return duration;
@@ -43,15 +70,6 @@ public class Movie {
      */
     public Movie() {
     }
-
-//    public Movie(String mainName, List<String> alsoKnownAs, String placeOfOrigin, String description, String image, List<String> ingredients) {
-////        this.mainName = mainName;
-////        this.alsoKnownAs = alsoKnownAs;
-////        this.placeOfOrigin = placeOfOrigin;
-////        this.description = description;
-////        this.image = image;
-////        this.ingredients = ingredients;
-//    }
 
     public String getPosterPath() {
         return posterPath;
@@ -99,5 +117,23 @@ public class Movie {
 
     public void setUserRating(double userRating) {
         this.userRating = userRating;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt (id);
+        dest.writeString (title);
+        dest.writeString (posterPath);
+        dest.writeString (plotSynopsis);
+        dest.writeString (releaseDate);
+        dest.writeDouble (userRating);
+        dest.writeString (reviews);
+        dest.writeString (trailers);
+        dest.writeInt (duration);
     }
 }

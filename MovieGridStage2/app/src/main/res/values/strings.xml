@@ -10,6 +10,14 @@
     <string name="Plot_Synopsis_label">Plot Synopsis:</string>
     <string name="User_Rating_label">User Rating:</string>
     <string name="Release_Date_label">Release Date:</string>
+    <string name="Trailer_label">Trailers:</string>
+    <string name="Review_label">Reviews:</string>
+
+    <!-- Default Text -->
+    <string name="default_text">Default Text</string>
+    <string name="default_rating">8.1/10</string>
+    <string name="default_duration">120 min</string>
+    <string name="default_year">2017</string>
 
     <!-- Strings related to Settings -->
     <string name="action_settings">Settings</string>
@@ -21,5 +29,8 @@
     <string name="mark_favorite">MARK AS FAVORITE</string>
     <string name="un_mark_favorite">UN MARK AS FAVORITE</string>
     <string name="fav_add">Movie added to your favorites</string>
+
+
+
 
 </resources>

@@ -9,7 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "API_VAL", API_KEY_VALUE)
+        buildConfigField("String", "API_VAL", "\"934884e743fe5773be2e5217bfea061b\"")
 
     }
     buildTypes {

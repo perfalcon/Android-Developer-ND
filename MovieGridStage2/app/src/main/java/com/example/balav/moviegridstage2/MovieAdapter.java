@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.balav.moviegridstage2.model.Movie;
 import com.example.balav.moviegridstage2.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -66,13 +67,11 @@ public class MovieAdapter extends RecyclerView.Adapter {
         ImageView imageView;
         public ImageViewHolder(View itemView) {
             super (itemView);
-          // listItemNumberView = (TextView) itemView.findViewById(R.id.tv_item_number);
             imageView = (ImageView)itemView.findViewById (R.id.iv_movie_image);
             itemView.setOnClickListener(ImageViewHolder.this);
         }
         void bind(int listIndex) {
-         //   listItemNumberView.setText(String.valueOf(listIndex));
-            Picasso.with (mContext)
+                   Picasso.with (mContext)
                     .load (moviePoster (listIndex))
                     .into (imageView);
         }
@@ -94,7 +93,10 @@ public class MovieAdapter extends RecyclerView.Adapter {
         }
         private void launchDetailActivity(int id) {
             Intent intent = new Intent(mContext, DetailActivity.class);
-            intent.putExtra(DetailActivity.MOVIE_ID, id);
+            //intent.putExtra(DetailActivity.MOVIE_ID, id);
+            Movie movie = new Movie();
+            movie.setId(id);
+            intent.putExtra(DetailActivity.MOVIE_ID,movie);
             if(optionSelected!=null && !optionSelected.isEmpty ()){
                 intent.putExtra (DetailActivity.OPTION_SELECTED,optionSelected);
             }

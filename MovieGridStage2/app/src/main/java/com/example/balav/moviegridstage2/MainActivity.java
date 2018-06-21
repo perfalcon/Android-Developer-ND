@@ -13,6 +13,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,18 +56,14 @@ public class MainActivity extends AppCompatActivity implements
 
     private void loadGridView(){
         Log.v(TAG,"Calling loadGridView-->option-->"+optionSelected);
+        int no_cols= calculateNoOfColumns(this);
+        Log.v(TAG,"No of cols-->"+no_cols);
         mImageGrid = findViewById(R.id.rv_numbers);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, no_cols);
         mImageGrid.setLayoutManager(gridLayoutManager);
         mImageGrid.setHasFixedSize(true);
         mAdapter = new MovieAdapter(this,listPosterUrls,listIDs,optionSelected);
         mImageGrid.setAdapter(mAdapter);
-      /*  mImageGrid.setO.setOnItemClickListener(new AdapterView.OnItemClickListener () {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                launchDetailActivity(listIDs.get (position));
-            }
-        });*/
     }
 
 
@@ -259,4 +256,13 @@ public class MainActivity extends AppCompatActivity implements
         super.onDestroy ();
     }
 
+    public static int calculateNoOfColumns(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int scalingFactor = 200;
+        int noOfColumns = (int) (dpWidth / scalingFactor);
+        if(noOfColumns < 2)
+            noOfColumns = 2;
+        return noOfColumns;
+    }
 }
