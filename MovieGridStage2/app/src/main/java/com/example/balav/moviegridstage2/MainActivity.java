@@ -39,18 +39,41 @@ public class MainActivity extends AppCompatActivity implements
     private static final String MOVIE_SORT_TOP_RATED="top_rated";
     private static final String MOVIE_SORT_FAVORITES="favorites";
 
+
     private static final int MOVIE_LOADER_ID = 0;
 
     private MovieAdapter mAdapter;
     private RecyclerView mImageGrid;
+    private Cursor mMovieData;
+
     private String optionSelected=MOVIE_SORT_POPULAR;
 
+
+    private static final String GRID_SCROLL_POSITION="grid_scroll_position";
+    private static final String LIST_IDS_KEY="list_ids_key";
+    private static final String LIST_POSTER_URLS="list_poster_urls";
     private static final int NUM_LIST_ITEMS = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_main);
-        loadMovies(MOVIE_SORT_POPULAR);
+        if(savedInstanceState != null){
+            Log.v(TAG,"Restoring State");
+            loadGridView ();
+            if(savedInstanceState.containsKey(GRID_SCROLL_POSITION)){
+                mImageGrid.getLayoutManager ().onRestoreInstanceState (savedInstanceState.getParcelable (GRID_SCROLL_POSITION));
+            }
+            if(savedInstanceState.containsKey (LIST_POSTER_URLS)){
+                listPosterUrls = savedInstanceState.getStringArrayList (LIST_POSTER_URLS);
+            }
+            if(savedInstanceState.containsKey (LIST_IDS_KEY)){
+                listIDs=savedInstanceState.getIntegerArrayList (LIST_IDS_KEY);
+            }
+            hookAdapterGrid();
+        }else{
+            loadMovies(MOVIE_SORT_POPULAR);
+       }
+
     }
 
 
@@ -62,10 +85,12 @@ public class MainActivity extends AppCompatActivity implements
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, no_cols);
         mImageGrid.setLayoutManager(gridLayoutManager);
         mImageGrid.setHasFixedSize(true);
+    }
+
+    private void hookAdapterGrid(){
         mAdapter = new MovieAdapter(this,listPosterUrls,listIDs,optionSelected);
         mImageGrid.setAdapter(mAdapter);
     }
-
 
     private void loadMovies(String movie_type){
         if(NetworkUtils.isConnected (MainActivity.this)){
@@ -108,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements
         return  new AsyncTaskLoader<Cursor> (this) {
 
             // Initialize a Cursor, this will hold all the task data
-            Cursor mMovieData = null;
+          //  Cursor mMovieData = null;
 
             // onStartLoading() is called when a loader first starts loading data
             @Override
@@ -145,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements
             // deliverResult sends the result of the load, a Cursor, to the registered listener
             public void deliverResult(Cursor data) {
                 mMovieData = data;
-                super.deliverResult(data);
+                super.deliverResult(mMovieData);
             }
         };
     }
@@ -153,13 +178,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         Log.v (TAG,"[onLoadFinished]--");
-        if(data.getCount ()>0){
-            loadMoviesFromCursor(data);
-        }else{
-            if(optionSelected.equals (MOVIE_SORT_FAVORITES)){
-                Toast.makeText(this, R.string.no_favorites_message, Toast.LENGTH_SHORT).show();
-            }
-
+        if(optionSelected.equals (MOVIE_SORT_FAVORITES)){
+            if(data.getCount ()>0){
+                loadMoviesFromCursor(data);
+            }else{
+                    Toast.makeText(this, R.string.no_favorites_message, Toast.LENGTH_SHORT).show();
+                }
         }
     }
 
@@ -181,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements
         listPosterUrls = posterUrls;
         listIDs=movieIds;
         loadGridView();
+        hookAdapterGrid ();
     }
 
     @Override
@@ -210,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements
             listIDs = JsonUtils.getMoviesIDs (movieResults);
             Log.v ("PosterUrlsSize--->", ""+listPosterUrls.size ());
             loadGridView();
+            hookAdapterGrid();
         }
     }
 
@@ -254,6 +280,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy(){
         super.onDestroy ();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState (outState);
+        Log.v(TAG,"Saving the State");
+
+        outState.putParcelable (GRID_SCROLL_POSITION, mImageGrid.getLayoutManager ().onSaveInstanceState ());
+        outState.putStringArrayList (LIST_IDS_KEY,(ArrayList)listIDs);
+        outState.putStringArrayList (LIST_POSTER_URLS,(ArrayList)listPosterUrls);
+
     }
 
     public static int calculateNoOfColumns(Context context) {

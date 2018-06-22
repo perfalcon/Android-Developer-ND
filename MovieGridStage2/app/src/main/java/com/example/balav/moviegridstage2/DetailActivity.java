@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class DetailActivity extends AppCompatActivity implements  CompoundButton
     private static final int DEFAULT_ID = -1;
     public static final String OPTION_SELECTED="optionSelected";
     private static final int MOVIE_LOADER_ID=1;
+    private static final  String MOVIE_KEY="movie";
     private Movie movie;
     private FavoriteMoviesContentProvider favoriteMoviesContentProvider;
     private Cursor cursor;
@@ -58,54 +60,73 @@ public class DetailActivity extends AppCompatActivity implements  CompoundButton
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_detail);
         ImageView posterIv = findViewById(R.id.poster_iv);
-        Intent intent = getIntent();
-        if (intent == null) {
-            closeOnError();
-        }
 
-        Movie fromIntent = intent.getParcelableExtra (MOVIE_ID);
-        if(fromIntent == null){
-            closeOnError ();
-        }
-        int movie_id=fromIntent.getId ();
-
-
-        Log.v (TAG,"OPTION_SELECTED-->"+intent.getStringExtra (OPTION_SELECTED));
-        bFav = intent.getStringExtra (OPTION_SELECTED).equals ("favorites");//?true:false;
-        Log.v (TAG,"bFav-->"+bFav);
-
-
-        if(NetworkUtils.isConnected (DetailActivity.this)){
-            loadMovie (movie_id);
-        }else{
-            Log.v (TAG,"NO INTERNET CONNECTION ... but can show Favorite Movies");
-            if(bFav){//if Favorite movies selected
-                loadMovie (movie_id);
-            }else{
-                posterIv.setVisibility (View.INVISIBLE);
-                populateUI_NoConnection();
+        if(savedInstanceState != null) {
+            Log.v (TAG, "Restoring State");
+            if(savedInstanceState.containsKey(MOVIE_KEY)){
+              movie =savedInstanceState.getParcelable (MOVIE_KEY);
             }
+            if(savedInstanceState.containsKey (OPTION_SELECTED)){
+                bFav=savedInstanceState.getBoolean (OPTION_SELECTED);
+            }
+            populateUI(movie);
+        }else {
+            Intent intent = getIntent ();
+            if (intent == null) {
+                closeOnError ();
+            }
+            Movie fromIntent = intent.getParcelableExtra (MOVIE_ID);
+            if (fromIntent == null) {
+                closeOnError ();
+            }
+            int movie_id = fromIntent.getId ();
 
 
+            Log.v (TAG, "OPTION_SELECTED-->" + intent.getStringExtra (OPTION_SELECTED));
+            bFav = intent.getStringExtra (OPTION_SELECTED).equals ("favorites");//?true:false;
+
+            Log.v (TAG, "bFav-->" + bFav);
+
+
+            if (NetworkUtils.isConnected (DetailActivity.this)) {
+                loadMovie (movie_id);
+            } else {
+                Log.v (TAG, "NO INTERNET CONNECTION ... but can show Favorite Movies");
+                if (bFav) {//if Favorite movies selected
+                    loadMovie (movie_id);
+                } else {
+                    posterIv.setVisibility (View.INVISIBLE);
+                    populateUI_NoConnection ();
+                }
+            }
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState (outState);
+        Log.v (TAG, "Saving the State");
+        outState.putParcelable (MOVIE_KEY,movie);
+        outState.putBoolean (OPTION_SELECTED, bFav);
+    }
     private void populateUI_NoConnection(){
-//        TextView mTitle = (TextView) findViewById(R.id.title_tv);
-//        TextView mPlotSynopsis = (TextView) findViewById(R.id.plot_synopsis_tv);
-//        TextView mUserRating = (TextView)findViewById (R.id.user_rating_tv);
-//        TextView mReleaseDate = (TextView)findViewById (R.id.relase_date_tv);
-//        mTitle.setText ("Please Check your Internet Connection");
-//        mTitle.setTextSize (16);
-//        mTitle.setTextColor (Color.RED);
-//        mPlotSynopsis.setVisibility (View.INVISIBLE);
-//        mUserRating.setVisibility (View.INVISIBLE);
-//        mReleaseDate.setVisibility (View.INVISIBLE);
-//
-//        ((TextView) findViewById(R.id.title_label_tv)).setVisibility (View.INVISIBLE);
-//        ((TextView) findViewById(R.id.plot_synopsis_label_tv)).setVisibility (View.INVISIBLE);
-//        ((TextView)findViewById (R.id.user_rating_label_tv)).setVisibility (View.INVISIBLE);
-//        ((TextView)findViewById (R.id.relase_date_label_tv)).setVisibility (View.INVISIBLE);
+        TextView mTitle = (TextView) findViewById(R.id.title_tv);
+        TextView mPlotSynopsis = (TextView) findViewById(R.id.plot_synopsis_tv);
+        TextView mUserRating = (TextView)findViewById (R.id.user_rating_tv);
+        TextView mReleaseDate = (TextView)findViewById (R.id.relase_date_tv);
+        mTitle.setText ("Please Check your Internet Connection");
+        mTitle.setTextSize (16);
+        mTitle.setTextColor (Color.RED);
+        mPlotSynopsis.setVisibility (View.INVISIBLE);
+        mUserRating.setVisibility (View.INVISIBLE);
+        mReleaseDate.setVisibility (View.INVISIBLE);
+
+        ((TextView)findViewById (R.id.duration_tv)).setVisibility (View.INVISIBLE);
+        ((TextView)findViewById (R.id.trailer_label)).setVisibility (View.INVISIBLE);
+        ((TextView)findViewById (R.id.review_label)).setVisibility (View.INVISIBLE);
+        ((ToggleButton)findViewById (R.id.favorite_tb)).setVisibility (View.INVISIBLE);
+        ((RecyclerView)findViewById (R.id.rv_trailers)).setVisibility (View.INVISIBLE);
+        ((RecyclerView)findViewById (R.id.rv_reviews)).setVisibility (View.INVISIBLE);
     }
     public  void OnShareClicked(View v){
         String shareText = (String) v.getTag ();
